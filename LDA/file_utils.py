@@ -1,6 +1,6 @@
 import os
-import utils
-import globalatt
+import util_functions
+import global_att
 
 # read_settings
 #   read in the settings file into global variables
@@ -8,10 +8,10 @@ def read_settings(file_name):
     settings_file = open(file_name, "r")
 
     # set global variables from settings file
-    globalatt.VAR_MAX_ITER  = int(settings_file.readline().strip().split(":")[1])
-    globalatt.VAR_CONVERGED = float(settings_file.readline().strip().split(":")[1])
-    globalatt.EM_MAX_ITER   = int(settings_file.readline().strip().split(":")[1])
-    globalatt.EM_CONVERGED  = float(settings_file.readline().strip().split(":")[1])
+    global_att.VAR_MAX_ITER  = int(settings_file.readline().strip().split(":")[1])
+    global_att.VAR_CONVERGED = float(settings_file.readline().strip().split(":")[1])
+    global_att.EM_MAX_ITER   = int(settings_file.readline().strip().split(":")[1])
+    global_att.EM_CONVERGED  = float(settings_file.readline().strip().split(":")[1])
     alpha_action  = settings_file.readline().strip().split(":")[1]
 
     # set estimate alpha varible
@@ -46,6 +46,6 @@ def write_word_assignment(file_pointer, document, phi, model):
     file_pointer.write("%03d" % document.length)
     for n in range(0, document.length):
         file_pointer.write(" %04d:%02d" % (
-                document.words[n], utils.argmax(phi[n], model.num_topics)))
+                document.words[n], util_functions.argmax(phi[n], model.num_topics)))
 
     file_pointer.write("\n")

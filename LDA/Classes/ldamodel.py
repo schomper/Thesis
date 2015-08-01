@@ -1,5 +1,5 @@
 import math
-import utils
+import util_functions
 
 class LDAModel:
 
@@ -79,7 +79,7 @@ class LDAModel:
                     self.log_prob_w[k][w] = -100
 
         if(estimate_alpha == 1):
-            self.alpha = utils.opt_alpha(ss.alpha_suffstats, ss.num_docs, \
+            self.alpha = util_functions.opt_alpha(ss.alpha_suffstats, ss.num_docs, \
                          self.num_topics)
 
             print("new alpha = %5.5f\n" % (float(self.alpha)))

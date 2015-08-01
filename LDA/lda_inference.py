@@ -2,9 +2,9 @@
 
 import sys
 import math
-import utils
-import fileutils
-import globalatt
+import util_functions
+import file_utils
+
 from classes.corpus import Corpus
 from classes.ldamodel import LDAModel
 
@@ -27,13 +27,13 @@ def infer(model_root, save_location, corpus):
         document = corpus.docs[index]
         phi = [[0 for x in range(model.num_topics)] for x in range(document.length)]
 
-        likelihood = utils.lda_inference(document, model, var_gamma[index], phi);
+        likelihood = util_functions.lda_inference(document, model, var_gamma[index], phi);
         file_pointer.write("%5.5f\n" % likelihood)
 
     file_pointer.close()
 
     filename ="output/" + save_location + "-gamma.dat"
-    fileutils.save_gamma(filename, var_gamma, corpus.num_docs, model.num_topics);
+    file_utils.save_gamma(filename, var_gamma, corpus.num_docs, model.num_topics);
 
 if(__name__ == "__main__"):
 

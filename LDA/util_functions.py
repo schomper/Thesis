@@ -1,5 +1,5 @@
 import math
-import globalatt
+import global_att
 
 def doc_e_step(document, gamma, phi, model, ss):
 
@@ -90,7 +90,7 @@ def lda_inference(document, model, var_gamma, phi):
 
     var_iter = 0
 
-    while ((converged > globalatt.VAR_CONVERGED) and ((var_iter < globalatt.VAR_MAX_ITER) or (globalatt.VAR_MAX_ITER == -1))):
+    while ((converged > global_att.VAR_CONVERGED) and ((var_iter < global_att.VAR_MAX_ITER) or (global_att.VAR_MAX_ITER == -1))):
         var_iter = var_iter + 1
         for n in range(0, document.length):
 
@@ -180,8 +180,8 @@ def opt_alpha(ss, D, K):
     log_a = log_a - df/(d2f * a + df)
     print("alpha maximization : %5.5f   %5.5f" % (f, df))
 
-    while ((math.fabs(df) > globalatt.NEWTON_THRESH) and\
-           (iter < globalatt.MAX_ALPHA_ITER)):
+    while ((math.fabs(df) > global_att.NEWTON_THRESH) and\
+           (iter < global_att.MAX_ALPHA_ITER)):
 
         iter += 1
         a = math.exp(log_a)
