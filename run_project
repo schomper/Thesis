@@ -4,7 +4,13 @@
 # Runs the chain of programs so user does not have to individually run each
 ###########################################################################
 
+# Run web crawler
 echo "Step 1: Running Webcrawler"
 cd ./Tools/Crawler/
 ./web_crawler.py
-echo "Done with Webcrawler"
+
+# Run vocab gen
+echo "Step 2: Running Vocab-Gen"
+cd ..
+./gen_vocab_file.py
+

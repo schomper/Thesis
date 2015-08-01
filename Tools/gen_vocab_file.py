@@ -1,7 +1,11 @@
+#! /usr/bin/python3
+
 import sys
 import re
 import string
 
+OUTPUT_FILE_NAME = "output.txt"
+VOCAB_OUTPUT_FILE_NAME = "vocab_output.txt"
 
 def find_list_index(list_list, value):
     for i in range(len(list_list)):
@@ -24,7 +28,7 @@ if (__name__ == '__main__'):
 
     # Produce vocab file
     reading = False
-    output_file = open('output.txt', 'w')
+    output_file = open(OUTPUT_FILE_NAME, 'w')
     vocab = []
     word_count = 0
     doc_words = []
@@ -109,7 +113,7 @@ if (__name__ == '__main__'):
                     doc_words[list_index][1] = doc_words[list_index][1] + 1
 
     
-    vocab_file = open('vocab.txt', 'w')
+    vocab_file = open(VOCAB_OUTPUT_FILE_NAME, 'w')
     
     for word in vocab:
         vocab_file.write("%s\n" % word)
