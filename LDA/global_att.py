@@ -1,0 +1,11 @@
+VAR_MAX_ITER    = None
+VAR_CONVERGED   = None
+EM_MAX_ITER     = None
+EM_CONVERGED    = None
+ESTIMATE_ALPHA  = None
+INITIAL_ALPHA   = None
+NTOPICS         = None
+
+NEWTON_THRESH = 1e-5
+MAX_ALPHA_ITER = 1000
+LAG = 5
