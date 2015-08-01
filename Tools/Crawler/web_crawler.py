@@ -1,6 +1,12 @@
+#! /usr/bin/python3
+
 import re
 import urllib
 from bs4 import BeautifulSoup
+
+# Define constants
+CONFIG_FILE_NAME = "crawler.conf"
+OUTPUT_FILE_NAME = "crawl_output.txt"
 
 #   get_area_links:
 #       Function gets the hyperlinks present in a certain area
@@ -95,8 +101,8 @@ def processPages(url, depth):
 
 if(__name__ == "__main__"):
     # set crawl properties
-    config_file = open("crawl_config.txt", "r")
-    doc_file = open("doc.txt", "w")
+    config_file = open(CONFIG_FILE_NAME, "r")
+    doc_file = open(OUTPUT_FILE_NAME, "w")
     count = 0
     processedPages = []
 

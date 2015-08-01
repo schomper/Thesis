@@ -1,0 +1,10 @@
+###########################################################################
+# Program: run_project
+# 
+# Runs the chain of programs so user does not have to individually run each
+###########################################################################
+
+echo "Step 1: Running Webcrawler"
+cd ./Tools/Crawler/
+./web_crawler.py
+echo "Done with Webcrawler"
