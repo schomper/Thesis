@@ -14,3 +14,9 @@ echo "Step 2: Running Vocab-Gen"
 cd ..
 ./gen_vocab_file.py
 
+# Run estimate
+echo "Step 3: Running lda estimate"
+cd ..
+cd LDA
+./lda_estimate.py
+

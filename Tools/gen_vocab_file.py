@@ -4,8 +4,9 @@ import sys
 import re
 import string
 
-OUTPUT_FILE_NAME = "output.txt"
-VOCAB_OUTPUT_FILE_NAME = "vocab_output.txt"
+DEFAULT_INPUT_FILE_NAME = "../Output/crawl.out"
+OUTPUT_FILE_NAME = "../Output/word_index_amount.out"
+VOCAB_OUTPUT_FILE_NAME = "../Output/vocab_list.out"
 
 
 def find_list_index(list_list, value):
@@ -18,11 +19,15 @@ def find_list_index(list_list, value):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) != 2:
+    if len(sys.argv) == 1:
+        text_file = DEFAULT_INPUT_FILE_NAME
+
+    elif len(sys.argv) == 2:
+        text_file = sys.argv[1]
+
+    else:
         print("usage: .py <text-file>\n")
         sys.exit(1)
-
-    text_file = sys.argv[1]
 
     text_lines = open(text_file, 'r').readlines()
 

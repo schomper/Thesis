@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup
 
 # Define constants
 CONFIG_FILE_NAME = "crawler.conf"
-OUTPUT_FILE_NAME = "crawl_output.txt"
+OUTPUT_FILE_NAME = "../../Output/crawl.out"
+
 
 #   get_area_links:
 #       Function gets the hyperlinks present in a certain area
@@ -23,38 +24,40 @@ def get_area_links(relevantArea):
         link = link["href"]
 
         # avoid local links
-        if("#" in link):
+        if "#" in link:
             continue
 
         links.append(link)
 
     return links
 
+
 def process_next_level(relevant_links, depth):
     global count
 
     for link in relevant_links:
         print("%d: processing %d:%d links" % (depth, relevant_links.index(link),
-                            len(relevant_links)))
+                                              len(relevant_links)))
         # relative urls
         if link.startswith("/"):
 
             host = url.replace('https://', '', 1)
-            if("/" in host):
+            if "/" in host:
                 host, rest = re.split("/", host, 1)
 
             link = "https://" + host + link
 
-        if (count == 100):
+        if count == 100:
             return
 
         if depth:
-            processPages(link, depth - 1)
+            process_pages(link, depth - 1)
+
 
 def print_document_to_file(page_title, page_body, doc_file):
     global count
 
-    count = count + 1
+    count += 1
 
     doc_file.write("<DOC>\n")
     doc_file.write("<DOCNAME>%s</DOCNAME>\n" % page_title)
@@ -63,24 +66,25 @@ def print_document_to_file(page_title, page_body, doc_file):
     doc_file.write("</TEXT>\n")
     doc_file.write("</DOC>\n")
 
-def processPages(url, depth):
+
+def process_pages(url, depth):
     global HEADING
     global BODY
     global HOST
     global doc_file
     global processedPages
 
-    if(url.startswith(HOST) and (not url in processedPages)):
+    if url.startswith(HOST) and (url not in processedPages):
 
         # add page to processed pages
         processedPages.append(url)
 
         try:
-            #print("Trying: %s" % url)
+            # print("Trying: %s" % url)
             response = urllib.request.urlopen(url)
 
         except(Exception, urllib.error.HTTPError):
-            #print("Skipping %s: 404" % (url))
+            # print("Skipping %s: 404" % (url))
             return
 
         response_contents = response.read()
@@ -99,17 +103,17 @@ def processPages(url, depth):
         process_next_level(relevant_links, depth)
 
 
-if(__name__ == "__main__"):
+if __name__ == "__main__":
     # set crawl properties
     config_file = open(CONFIG_FILE_NAME, "r")
     doc_file = open(OUTPUT_FILE_NAME, "w")
     count = 0
     processedPages = []
 
-    url       = config_file.readline().strip().split(":", 1)[1]
-    HEADING   = config_file.readline().strip().split(":", 1)[1]
-    BODY      = config_file.readline().strip().split(":", 1)[1]
-    depth     = config_file.readline().strip().split(":", 1)[1]
+    url = config_file.readline().strip().split(":", 1)[1]
+    HEADING = config_file.readline().strip().split(":", 1)[1]
+    BODY = config_file.readline().strip().split(":", 1)[1]
+    depth = config_file.readline().strip().split(":", 1)[1]
 
     # set up host
     HOST = url.replace('https://', '', 1)
@@ -119,4 +123,4 @@ if(__name__ == "__main__"):
     config_file.close()
 
     # process pages
-    processPages(url, int(depth))
+    process_pages(url, int(depth))
