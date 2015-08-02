@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 # Define constants
 CONFIG_FILE_NAME = "crawler.conf"
 OUTPUT_FILE_NAME = "../../Output/crawl.out"
+MAX_REPS = 10000
 
 
 #   get_area_links:
@@ -47,7 +48,9 @@ def process_next_level(relevant_links, depth):
 
             link = "https://" + host + link
 
-        if count == 100:
+        if count % 20 == 0:
+            print("Processing link: %d" % count)
+        if count == MAX_REPS:
             return
 
         if depth:

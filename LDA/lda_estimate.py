@@ -65,14 +65,14 @@ def run_em(start, directory, corpus):
 
         # e-step
 
-        for d in range(0, corpus.num_docs):
+        for doc_index in range(0, corpus.num_docs):
 
             # Show user script is still running
-            if (d % 1000) == 0:
-                print("Document %d" % d)
+            if (doc_index % 100) == 0:
+                print("Document %d" % doc_index)
 
-            likelihood += util_functions.doc_e_step(corpus.docs[d],
-                                                    var_gamma[d],
+            likelihood += util_functions.doc_e_step(corpus.doc_list[doc_index],
+                                                    var_gamma[doc_index],
                                                     phi,
                                                     model,
                                                     ss)
@@ -107,14 +107,14 @@ def run_em(start, directory, corpus):
     filename = "%s/word-assignments.dat" % directory
     w_assign_file = open(filename, "w")
 
-    for d in range(0, corpus.num_docs):
+    for doc_index in range(0, corpus.num_docs):
 
         # Show user script is still processing
-        if (d % 100) == 0:
-            print("final e step document %d" % d)
+        if (doc_index % 100) == 0:
+            print("final e step document %d" % doc_index)
 
-        likelihood += util_functions.lda_inference(corpus.docs[d], model, var_gamma[d], phi)
-        file_utils.write_word_assignment(w_assign_file, corpus.docs[d], phi)
+        likelihood += util_functions.lda_inference(corpus.doc_list[doc_index], model, var_gamma[doc_index], phi)
+        file_utils.write_word_assignment(w_assign_file, corpus.doc_list[doc_index], phi)
 
     w_assign_file.close()
     likelihood_file.close()

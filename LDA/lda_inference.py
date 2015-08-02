@@ -28,7 +28,7 @@ def infer(model_root, save_location, corpus):
         if ((index % 100) == 0) and (index > 0):
             print("Document %d" % index)
 
-        document = corpus.docs[index]
+        document = corpus.doc_list[index]
         phi = [[0 for x in range(model.num_topics)] for x in range(document.length)]
 
         # Determine likelihood

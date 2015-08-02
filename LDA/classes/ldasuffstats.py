@@ -24,7 +24,7 @@ class LDASuffStats:
                 d = math.floor(random.random() * corpus.num_docs)
                 print("initialized with document", d)
 
-                doc = corpus.docs[d]
+                doc = corpus.doc_list[d]
                 for n in range(0, doc.length):
                     self.class_word[k][doc.words[n]] += doc.counts[n]
 

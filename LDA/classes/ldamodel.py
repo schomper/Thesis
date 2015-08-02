@@ -69,14 +69,14 @@ class LDAModel:
 
     def mle(self, ss, estimate_alpha):
 
-        for k in range(0, self.num_topics):
-            for w in range(0, self.num_terms):
+        for topic_index in range(0, self.num_topics):
+            for term_index in range(0, self.num_terms):
 
-                if ss.class_word[k][w] > 0:
-                    self.log_prob_w[k][w] = \
-                        math.log(ss.class_word[k][w]) - math.log(ss.class_total[k])
+                if ss.class_word[topic_index][term_index] > 0:
+                    self.log_prob_w[topic_index][term_index] = \
+                        math.log(ss.class_word[topic_index][term_index]) - math.log(ss.class_total[topic_index])
                 else:
-                    self.log_prob_w[k][w] = -100
+                    self.log_prob_w[topic_index][term_index] = -100
 
         if estimate_alpha == 1:
             self.alpha = util_functions.opt_alpha(ss.alpha_suffstats, ss.num_docs,

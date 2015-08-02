@@ -5,7 +5,7 @@ class Corpus:
     def __init__(self, filename):
         print("Initiating Corpus...")
 
-        self.docs = []
+        self.doc_list = []
         self.num_terms = 0
         self.num_docs = 0
 
@@ -42,7 +42,7 @@ class Corpus:
                         self.num_terms = word + 1
 
                 # increase number of docs
-                self.docs.append(document)
+                self.doc_list.append(document)
                 self.num_docs += 1
 
         print("Number of docs    : %d" % self.num_docs)
@@ -52,7 +52,7 @@ class Corpus:
 
         max_length = 0
         for n in range(0, self.num_docs):
-            if self.docs[n].length > max_length:
-                max_length = self.docs[n].length
+            if self.doc_list[n].length > max_length:
+                max_length = self.doc_list[n].length
 
         return max_length
