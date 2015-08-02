@@ -5,7 +5,7 @@
 ###########################################################################
 
 # Run web crawler
-echo "Step 1: Running Webcrawler"
+echo "Step 1: Running Web-crawler"
 cd ./Tools/Crawler/
 ./web_crawler.py
 

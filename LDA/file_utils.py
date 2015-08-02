@@ -2,29 +2,32 @@ import os
 import util_functions
 import global_att
 
+
 # read_settings
 #   read in the settings file into global variables
 def read_settings(file_name):
     settings_file = open(file_name, "r")
 
     # set global variables from settings file
-    global_att.VAR_MAX_ITER  = int(settings_file.readline().strip().split(":")[1])
+    global_att.VAR_MAX_ITER = int(settings_file.readline().strip().split(":")[1])
     global_att.VAR_CONVERGED = float(settings_file.readline().strip().split(":")[1])
-    global_att.EM_MAX_ITER   = int(settings_file.readline().strip().split(":")[1])
-    global_att.EM_CONVERGED  = float(settings_file.readline().strip().split(":")[1])
-    alpha_action  = settings_file.readline().strip().split(":")[1]
+    global_att.EM_MAX_ITER = int(settings_file.readline().strip().split(":")[1])
+    global_att.EM_CONVERGED = float(settings_file.readline().strip().split(":")[1])
+    alpha_action = settings_file.readline().strip().split(":")[1]
 
     # set estimate alpha varible
-    if(alpha_action == "fixed"):
-        globalatt.ESTIMATE_ALPHA = 0
+    if alpha_action == "fixed":
+        global_att.ESTIMATE_ALPHA = 0
     else:
-        globalatt.ESTIMATE_ALPHA = 1
+        global_att.ESTIMATE_ALPHA = 1
 
     settings_file.close()
+
 
 def make_directory(directory_name):
     if not os.path.exists(directory_name):
         os.makedirs(directory_name)
+
 
 def save_gamma(filename, gamma, num_docs, num_topics):
     file_pointer = open(filename, "w")
@@ -41,11 +44,10 @@ def save_gamma(filename, gamma, num_docs, num_topics):
 
 
 # writes the word assignments line for a document to a file
-def write_word_assignment(file_pointer, document, phi, model):
-
+def write_word_assignment(file_pointer, document, phi):
     file_pointer.write("%03d" % document.length)
     for n in range(0, document.length):
         file_pointer.write(" %04d:%02d" % (
-                document.words[n], util_functions.argmax(phi[n], model.num_topics)))
+            document.words[n], util_functions.max_value_position(phi[n])))
 
     file_pointer.write("\n")

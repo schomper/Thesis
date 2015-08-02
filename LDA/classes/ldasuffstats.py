@@ -1,7 +1,8 @@
+import math
 import random
 
-class LDASuffStats:
 
+class LDASuffStats:
     def __init__(self, model):
         self.class_word = []
         self.class_total = []
@@ -34,7 +35,7 @@ class LDASuffStats:
     def random_initialize(self, model):
         for k in range(0, model.num_topics):
             for n in range(0, model.num_terms):
-                self.class_word[k][n] += 1.0/model.num_terms + random.random()
+                self.class_word[k][n] += 1.0 / model.num_terms + random.random()
                 self.class_total[k] += self.class_word[k][n]
 
     def zero_initialize(self, model):
