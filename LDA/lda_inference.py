@@ -19,7 +19,7 @@ def infer(model_root, save_location, corpus):
                  for x in range(corpus.num_docs)]
 
     # Open file in which to write the lda likelihood
-    filename = "output/" + save_location + "-lda-likelihood.dat"
+    filename = save_location + "-lda-likelihood.dat"
     file_pointer = open(filename, "w")
 
     for index in range(0, corpus.num_docs):
@@ -39,7 +39,7 @@ def infer(model_root, save_location, corpus):
 
     file_pointer.close()
 
-    filename = "output/" + save_location + "-gamma.dat"
+    filename = save_location + "-gamma.dat"
     file_utils.save_gamma(filename, var_gamma, corpus.num_docs, model.num_topics)
 
 
