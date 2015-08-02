@@ -8,8 +8,8 @@
 
 import sys
 
-def print_topics(beta_file, vocab_file, nwords = 25):
 
+def print_topics(beta_file, vocab_file, nwords=25):
     # get the vocabulary
 
     vocab = file(vocab_file, 'r').readlines()
@@ -21,19 +21,20 @@ def print_topics(beta_file, vocab_file, nwords = 25):
     indices = range(len(vocab))
     topic_no = 0
     for topic in file(beta_file, 'r'):
-        print 'topic %03d' % topic_no
+        print 'Topic %03d' % topic_no
         topic = map(float, topic.split())
-        indices.sort(lambda x,y: -cmp(topic[x], topic[y]))
+        indices.sort(lambda x, y: -cmp(topic[x], topic[y]))
         for i in range(nwords):
             print '   %s' % vocab[indices[i]]
-        topic_no = topic_no + 1
+        topic_no += 1
         print '\n'
 
-if (__name__ == '__main__'):
 
-    if (len(sys.argv) != 4):
-       print 'usage: python topics.py <beta-file> <vocab-file> <num words>\n'
-       sys.exit(1)
+if __name__ == '__main__':
+
+    if len(sys.argv) != 4:
+        print 'usage: python topics.py <beta-file> <vocab-file> <num words>\n'
+        sys.exit(1)
 
     beta_file = sys.argv[1]
     vocab_file = sys.argv[2]
