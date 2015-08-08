@@ -51,8 +51,8 @@ class Corpus:
     def max_length(self):
 
         max_length = 0
-        for n in range(0, self.num_docs):
-            if self.doc_list[n].length > max_length:
-                max_length = self.doc_list[n].length
+        for doc_index in range(0, self.num_docs):
+            if self.doc_list[doc_index].length > max_length:
+                max_length = self.doc_list[doc_index].length
 
         return max_length

@@ -4,10 +4,12 @@ import re
 import urllib
 from bs4 import BeautifulSoup
 
+from nltk.corpus import stopwords
+
 # Define constants
 CONFIG_FILE_NAME = "crawler.conf"
 OUTPUT_FILE_NAME = "../../Output/crawl.out"
-MAX_REPS = 10000
+MAX_REPS = 1000
 
 
 #   get_area_links:
@@ -37,8 +39,8 @@ def process_next_level(relevant_links, depth):
     global count
 
     for link in relevant_links:
-        print("%d: processing %d:%d links" % (depth, relevant_links.index(link),
-                                              len(relevant_links)))
+        #print("%d: processing %d:%d links" % (depth, relevant_links.index(link),
+                                              #len(relevant_links)))
         # relative urls
         if link.startswith("/"):
 
@@ -50,6 +52,7 @@ def process_next_level(relevant_links, depth):
 
         if count % 20 == 0:
             print("Processing link: %d" % count)
+
         if count == MAX_REPS:
             return
 
@@ -65,7 +68,10 @@ def print_document_to_file(page_title, page_body, doc_file):
     doc_file.write("<DOC>\n")
     doc_file.write("<DOCNAME>%s</DOCNAME>\n" % page_title)
     doc_file.write("<TEXT>\n")
-    doc_file.write("%s\n" % page_body.getText())
+    cached_stop_words = stopwords.words("english")
+    text = page_body.getText()
+    text = ' '.join([word for word in text.split() if word not in cached_stop_words])
+    doc_file.write("%s\n" % text)
     doc_file.write("</TEXT>\n")
     doc_file.write("</DOC>\n")
 
