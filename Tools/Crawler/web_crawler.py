@@ -1,16 +1,11 @@
 #! /usr/bin/python3
 
 import re
+import sys
 import urllib
+
 from bs4 import BeautifulSoup
-
 from nltk.corpus import stopwords
-
-# Define constants
-CONFIG_FILE_NAME = "crawler.conf"
-OUTPUT_FILE_NAME = "../../Output/crawl.out"
-MAX_REPS = 1000
-
 
 #   get_area_links:
 #       Function gets the hyperlinks present in a certain area
@@ -37,10 +32,11 @@ def get_area_links(relevantArea):
 
 def process_next_level(relevant_links, depth):
     global count
+    global MAX_REPS
 
     for link in relevant_links:
-        #print("%d: processing %d:%d links" % (depth, relevant_links.index(link),
-                                              #len(relevant_links)))
+        print("%d: processing %d:%d links" % (depth, relevant_links.index(link),
+                                              len(relevant_links)))
         # relative urls
         if link.startswith("/"):
 
@@ -113,23 +109,27 @@ def process_pages(url, depth):
 
 
 if __name__ == "__main__":
+
+    if len(sys.argv) != 7:
+        print("Usage: ./web_crawler.py <url> <depth> <heading> <body> <max_iter> <output>")
+        exit(1)
+        
     # set crawl properties
-    config_file = open(CONFIG_FILE_NAME, "r")
-    doc_file = open(OUTPUT_FILE_NAME, "w")
     count = 0
     processedPages = []
 
-    url = config_file.readline().strip().split(":", 1)[1]
-    HEADING = config_file.readline().strip().split(":", 1)[1]
-    BODY = config_file.readline().strip().split(":", 1)[1]
-    depth = config_file.readline().strip().split(":", 1)[1]
+    url = sys.argv[1] 
+    depth = int(sys.argv[2])
+    HEADING = sys.argv[3] 
+    BODY = sys.argv[4] 
+    MAX_REPS = int(sys.argv[5])
+    OUTPUT_FILE = sys.argv[6]
+
+    doc_file = open(OUTPUT_FILE, "w")
 
     # set up host
     HOST = url.replace('https://', '', 1)
     HOST = "https://" + HOST.split("/", 1)[0]
-
-    # close file
-    config_file.close()
 
     # process pages
     process_pages(url, int(depth))

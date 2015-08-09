@@ -4,11 +4,6 @@ import sys
 import re
 import string
 
-DEFAULT_INPUT_FILE_NAME = "../Output/crawl.out"
-OUTPUT_FILE_NAME = "../Output/word_index_amount.out"
-VOCAB_OUTPUT_FILE_NAME = "../Output/vocab_list.out"
-
-
 def find_list_index(list_list, value):
     for i in range(len(list_list)):
         if value == list_list[i][0]:
@@ -19,23 +14,18 @@ def find_list_index(list_list, value):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) == 1:
-        text_file = DEFAULT_INPUT_FILE_NAME
-
-    elif len(sys.argv) == 2:
-        text_file = sys.argv[1]
-
-    else:
-        print("usage: .py <text-file>\n")
+    if len(sys.argv) != 2:
+        print("usage: .py <directory_name>\n")
         sys.exit(1)
 
-    text_lines = open(text_file, 'r').readlines()
+    directory = sys.argv[1]
+    text_lines = open(directory + "/documents.txt", 'r').readlines()
 
     doc_counter = 0
 
     # Produce vocab file
     reading = False
-    output_file = open(OUTPUT_FILE_NAME, 'w')
+    output_file = open(directory + "/formatted.txt", 'w')
     vocab = []
     word_count = 0
     doc_words = []
@@ -115,7 +105,7 @@ if __name__ == '__main__':
 
                     doc_words[list_index][1] += 1
 
-    vocab_file = open(VOCAB_OUTPUT_FILE_NAME, 'w')
+    vocab_file = open(directory + "/vocab.txt", 'w')
 
     for word in vocab:
         vocab_file.write("%s\n" % word)
