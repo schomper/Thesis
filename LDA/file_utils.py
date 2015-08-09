@@ -9,11 +9,11 @@ def read_settings(file_name):
     settings_file = open(file_name, "r")
 
     # set global variables from settings file
-    global_att.VAR_MAX_ITER = int(settings_file.readline().strip().split(":")[1])
-    global_att.VAR_CONVERGED = float(settings_file.readline().strip().split(":")[1])
-    global_att.EM_MAX_ITER = int(settings_file.readline().strip().split(":")[1])
-    global_att.EM_CONVERGED = float(settings_file.readline().strip().split(":")[1])
-    alpha_action = settings_file.readline().strip().split(":")[1]
+    global_att.VAR_MAX_ITER = int(settings_file.readline().strip())
+    global_att.VAR_CONVERGED = float(settings_file.readline().strip())
+    global_att.EM_MAX_ITER = int(settings_file.readline().strip())
+    global_att.EM_CONVERGED = float(settings_file.readline().strip())
+    alpha_action = settings_file.readline().strip()
 
     # set estimate alpha varible
     if alpha_action == "fixed":

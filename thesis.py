@@ -79,7 +79,21 @@ def make_directory(directory_name):
     if not os.path.exists(directory_name):
         os.makedirs(directory_name)
 
+def generate_settings(run_info):
+
+    f = open('generated_settings.txt', 'w')
+    
+    f.write(run_info['VAR_MAX_ITER'] + "\n")
+    f.write(run_info['VAR_CONVERGENCE'] + "\n")
+    f.write(run_info['EM_MAX_ITER'] + "\n")
+    f.write(run_info['EM_CONVERGENCE'] + "\n")
+    f.write(run_info['ALPHA'] + "\n")
+
+    f.close()
+
 def process_run(run_info):
+
+    generate_settings(run_info)
 
     print("Processing Run: %s" % run_info['RUN_NAME'])
 
@@ -102,13 +116,14 @@ def process_run(run_info):
     print("###################################")
     print("# LDA Estimate")
     print("###################################")
-    input_text = "./LDA/lda_estimate.py "
+    input_text = "./LDA/lda_estimate.py " + run_info['ALPHA_VALUE'] + " " + run_info['TOPIC_AMOUNT'] + " generated_settings.txt " + run_info['DIRECTORY'] + "/formatted.txt "\
+                                          + run_info['GENERATION'] + " " + run_info['DIRECTORY'] + "/Estimate"
     os.system(input_text)
 
     print("###################################")
     print("# Print Topics")
     print("###################################")
-    input_text = "./LDA/lda_estimate.py "
+    input_text = "./Tools/print_topics.py " + run_info['DIRECTORY'] + "/Estimate/final.beta" + " " + run_info['DIRECTORY'] + "/vocab.txt" + " " + run_info['NUM_WORDS'] + " " + run_info['DIRECTORY']
     os.system(input_text)
 
 if __name__ == "__main__":

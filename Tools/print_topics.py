@@ -9,9 +9,7 @@
 import sys
 
 
-OUTPUT_FILE_NAME = "../Output/topic_results.out"
-
-def print_topics(beta_file, vocab_file, nwords=25):
+def print_topics(beta_file, vocab_file, nwords, directory):
     # get the vocabulary
 
     vocab = open(vocab_file, 'r').readlines()
@@ -21,7 +19,7 @@ def print_topics(beta_file, vocab_file, nwords=25):
     indices = list(range(len(vocab)))
     topic_no = 0
 
-    file_pointer = open(OUTPUT_FILE_NAME, "w")
+    file_pointer = open(directory + 'result.txt', "w")
 
     for topic in open(beta_file, 'r'):
         file_pointer.write('Topic %03d' % topic_no)
@@ -44,11 +42,12 @@ def print_topics(beta_file, vocab_file, nwords=25):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) != 4:
-        print('usage: python topics.py <beta-file> <vocab-file> <num words>\n')
+    if len(sys.argv) != 5:
+        print('usage: python topics.py <beta-file> <vocab-file> <num words> <directory>')
         sys.exit(1)
 
     beta_file = sys.argv[1]
     vocab_file = sys.argv[2]
     nwords = int(sys.argv[3])
-    print_topics(beta_file, vocab_file, nwords)
+    directory = sys.argv[4]
+    print_topics(beta_file, vocab_file, nwords, directory)
