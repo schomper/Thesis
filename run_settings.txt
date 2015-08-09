@@ -1,3 +1,31 @@
+*** RUN_3 ***
+######################
+# RUN SETTINGS
+######################
+DIRECTORY--------output
+######################
+# CRAWLER CONFIG
+######################
+WIKI_ADDRESS-----https://en.wikipedia.org/wiki/Public_relations
+HEADING_NAME-----firstHeading
+BODY_NAME--------content
+CRAWL_DEPTH------10
+MAX_CRAWL_ITEMS--10
+######################
+# ESTIMATE CONFIG
+######################
+VAR_MAX_ITER-----100
+VAR_CONVERGENCE--1e-6
+EM_MAX_ITER------100
+EM_CONVERGENCE---1e-4
+ALPHA------------estimate
+ALPHA_VALUE------0.5
+TOPIC_AMOUNT-----20
+GENERATION-------random
+######################
+# PRINT TOPICS
+######################
+NUM_WORDS--------20
 *** RUN_1 ***
 ######################
 # RUN SETTINGS
@@ -20,6 +48,34 @@ EM_MAX_ITER------100
 EM_CONVERGENCE---1e-4
 ALPHA------------estimate
 ALPHA_VALUE------0.01
+TOPIC_AMOUNT-----20
+GENERATION-------random
+######################
+# PRINT TOPICS
+######################
+NUM_WORDS--------20
+*** RUN_2 ***
+######################
+# RUN SETTINGS
+######################
+DIRECTORY--------output
+######################
+# CRAWLER CONFIG
+######################
+WIKI_ADDRESS-----https://wiki.archlinux.org/index.php/Arch_Linux
+HEADING_NAME-----firstHeading
+BODY_NAME--------content
+CRAWL_DEPTH------10
+MAX_CRAWL_ITEMS--10
+######################
+# ESTIMATE CONFIG
+######################
+VAR_MAX_ITER-----100
+VAR_CONVERGENCE--1e-6
+EM_MAX_ITER------100
+EM_CONVERGENCE---1e-4
+ALPHA------------estimate
+ALPHA_VALUE------0.5
 TOPIC_AMOUNT-----20
 GENERATION-------random
 ######################

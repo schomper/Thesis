@@ -3,7 +3,6 @@
 import os
 import sys
 
-
 def get_value(line):
     line = line.strip()
     dirty_list = line.split('-')
@@ -47,7 +46,10 @@ def get_session_info(file_name):
             run_dictionary['RUN_NAME'] = run_name
             # Run info
             remove_fluff(settings_file)
-            run_dictionary['DIRECTORY'] = get_value(settings_file.readline()) + "/" + run_dictionary['RUN_NAME']
+            directory = get_value(settings_file.readline())
+            run_dictionary['GENERAL'] = directory + "/General"
+            run_dictionary['DIRECTORY'] = directory + "/" + run_dictionary['RUN_NAME']
+            make_directory(run_dictionary['GENERAL'])
             make_directory(run_dictionary['DIRECTORY'])
             # Crawler info
             remove_fluff(settings_file)
@@ -91,48 +93,59 @@ def generate_settings(run_info):
 
     f.close()
 
-def process_run(run_info):
-
+def process_run(run_info, crawl_again):
+    
     generate_settings(run_info)
 
     print("Processing Run: %s" % run_info['RUN_NAME'])
-
-    # Run webcrawler
-    print("###################################")
-    print("# Web crawler")
-    print("###################################")
-    input_text = "./Tools/Crawler/web_crawler.py " + run_info['WIKI_ADDRESS'] + " " +  run_info['CRAWL_DEPTH'] + " " + run_info['HEADING_NAME']\
-                                                  + " " + run_info['BODY_NAME'] + " " + run_info['MAX_CRAWL_ITEMS'] + " " + run_info['DIRECTORY'] + "/documents.txt" 
-    os.system(input_text)
     
-    # Run process webcrawler output
-    print("###################################")
-    print("# Vocab Generation")
-    print("###################################")
-    input_text = "./Tools/gen_vocab_file.py " + run_info['DIRECTORY']
-    os.system(input_text)
+    if crawl_again:
+        # Run webcrawler
+        print("###################################")
+        print("# Web crawler")
+        print("###################################")
+        input_text = "./Tools/Crawler/web_crawler.py " + run_info['WIKI_ADDRESS'] + " " +  run_info['CRAWL_DEPTH'] + " " + run_info['HEADING_NAME']\
+                                                  + " " + run_info['BODY_NAME'] + " " + run_info['MAX_CRAWL_ITEMS'] + " " + run_info['GENERAL'] + "/documents.txt" 
+        os.system(input_text)
+    
+        # Run process webcrawler output
+        print("###################################")
+        print("# Vocab Generation")
+        print("###################################")
+        input_text = "./Tools/gen_vocab_file.py " + run_info['GENERAL']
+        os.system(input_text)
+
 
     # Run estimation script
     print("###################################")
     print("# LDA Estimate")
     print("###################################")
-    input_text = "./LDA/lda_estimate.py " + run_info['ALPHA_VALUE'] + " " + run_info['TOPIC_AMOUNT'] + " generated_settings.txt " + run_info['DIRECTORY'] + "/formatted.txt "\
+    input_text = "./LDA/lda_estimate.py " + run_info['ALPHA_VALUE'] + " " + run_info['TOPIC_AMOUNT'] + " generated_settings.txt " + run_info['GENERAL'] + "/formatted.txt "\
                                           + run_info['GENERATION'] + " " + run_info['DIRECTORY'] + "/Estimate"
     os.system(input_text)
 
     print("###################################")
     print("# Print Topics")
     print("###################################")
-    input_text = "./Tools/print_topics.py " + run_info['DIRECTORY'] + "/Estimate/final.beta" + " " + run_info['DIRECTORY'] + "/vocab.txt" + " " + run_info['NUM_WORDS'] + " " + run_info['DIRECTORY']
+    input_text = "./Tools/print_topics.py " + run_info['DIRECTORY'] + "/Estimate/final.beta" + " " + run_info['GENERAL'] + "/vocab.txt" + " " + run_info['NUM_WORDS'] + " " + run_info['DIRECTORY']
     os.system(input_text)
 
 if __name__ == "__main__":
-
+    
     if len(sys.argv) != 2:
         print("Usage: ./thesis.py <settings>")
         exit()
 
     runs = get_session_info(sys.argv[1])
 
+    prev_run = None
+    crawl_again = True
+
     for run in runs:
-        process_run(run)
+
+        if prev_run != None and prev_run['WIKI_ADDRESS'] != run['WIKI_ADDRESS']:
+            crawl_again = True        
+
+        process_run(run, crawl_again)
+        prev_run = run
+        crawl_again = False

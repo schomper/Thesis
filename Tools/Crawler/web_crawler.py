@@ -85,20 +85,21 @@ def process_pages(url, depth):
         processedPages.append(url)
 
         try:
-            # print("Trying: %s" % url)
             response = urllib.request.urlopen(url)
 
         except(Exception, urllib.error.HTTPError):
-            # print("Skipping %s: 404" % (url))
+            print("Skipping %s: 404" % (url))
             return
 
         response_contents = response.read()
         page_soup = BeautifulSoup(response_contents)
 
+
         try:
-            page_title = page_soup.find("h1", {"id": HEADING}).getText()
             page_body = page_soup.find("div", {"id": BODY})
+            page_title = page_soup.find("h1", {"id": HEADING}).getText()
         except(Exception, AttributeError):
+            print('Cannot find attributes')
             return
 
         print_document_to_file(page_title, page_body, doc_file)
