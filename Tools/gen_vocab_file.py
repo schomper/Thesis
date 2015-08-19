@@ -4,7 +4,7 @@ import sys
 import re
 import os
 import string
-
+from pathlib import Path
 
 doc_counter = 0
 reading = False
@@ -103,15 +103,43 @@ def process_line(line, output_file):
 
                 doc_words[list_index][1] += 1
 
-if __name__ == '__main__':
+
+def main():
+    """ Main function for program """
+    global doc_counter
+    global reading
+    global vocab
+    global word_count
+    global doc_words
+    global doc_word_count
+    global doc_info_string
 
     if len(sys.argv) != 3:
         print("usage: .py <input_directory> <output_directory>\n")
         sys.exit(1)
 
-    input_directory = sys.argv[1]
+    input_directory = Path(sys.argv[1])
     output_directory = sys.argv[2]
 
+
+    for year_directory in input_directory.iterdir():
+        for day_file in year_directory.iterdir():
+            print('Processing: {}'.format(day_file))
+            
+            with day_file.open() as f:
+                lines = f.readlines()
+
+            for line in lines:
+                process_line(line, output_file)
+            
+
+    vocab_file = open('vocab.txt', 'w')
+    print(len(vocab))
+    for word in vocab:
+        vocab_file.write("%s\n" % word)
+
+
+if __name__ == '__main__':
     doc_counter = 0
     reading = False
     output_file = open('formatted.txt', 'w')
@@ -120,20 +148,5 @@ if __name__ == '__main__':
     doc_words = []
     doc_word_count = 0
     doc_info_string = ""
-
-    for year_directory in os.listdir(input_directory):
-        for day_file in os.listdir(input_directory + '/' +  year_directory):
-            print('Processing: ' + day_file)
-            
-            f = open(input_directory + '/' +  year_directory + '/' + day_file, 'r')
-            text_lines = f.readlines()
-
-            for line in text_lines:
-                process_line(line, output_file)
-            
-
-    vocab_file = open('vocab.txt', 'w')
-
-    for word in vocab:
-        vocab_file.write("%s\n" % word)
-
+    
+    main()
