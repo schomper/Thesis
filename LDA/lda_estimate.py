@@ -113,7 +113,7 @@ def run_em(start, directory, corpus):
             print("final e step document %d" % doc_index)
 
         likelihood += util_functions.lda_inference(corpus.doc_list[doc_index], model, var_gamma[doc_index], phi)
-        file_utils.write_word_assignment(w_assign_file, corpus.doc_list[doc_index], phi)
+        file_utils.write_word_assignment(w_assign_file, corpus.doc_list[doc_index], phi, model)
 
     w_assign_file.close()
     likelihood_file.close()

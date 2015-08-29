@@ -14,23 +14,23 @@ class Corpus:
 #            for document in os.listdir(year_folder):
 #  1              print(document)
 
-        # open file
         with open(folder_name, "r") as document_list:
 
             # for each document
             for doc in document_list:
                 doc = doc.strip()
 
-                length, rest = doc.split(" ", 1)
-                length = int(length)
+                # Get the amount of unique words in this document
+                num_words, rest = doc.split(" ", 1)
+                num_words = int(num_words)
 
-                doc = document.Document(length)
+                doc = document.Document(num_words)
 
                 # for each word
-                for n in range(0, length):
+                for word_index in range(0, num_words):
 
                     # get that specific word:count pair
-                    if n < length - 1:
+                    if word_index < num_words - 1:
                         pair, rest = rest.split(' ', 1)
                     else:
                         pair = rest
@@ -41,7 +41,7 @@ class Corpus:
                     count = int(count)
 
                     # add pair to the document
-                    doc.add_pair(n, word, count)
+                    doc.add_pair(word_index, word, count)
 
                     if word >= self.num_terms:
                         self.num_terms = word + 1
@@ -57,7 +57,7 @@ class Corpus:
 
         max_length = 0
         for doc_index in range(0, self.num_docs):
-            if self.doc_list[doc_index].length > max_length:
-                max_length = self.doc_list[doc_index].length
+            if self.doc_list[doc_index].unique_word_count > max_length:
+                max_length = self.doc_list[doc_index].unique_word_count
 
         return max_length

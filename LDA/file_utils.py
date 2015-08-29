@@ -45,8 +45,10 @@ def save_gamma(filename, gamma, num_docs, num_topics):
 
 # writes the word assignments line for a document to a file
 def write_word_assignment(file_pointer, document, phi):
-    file_pointer.write("%03d" % document.length)
-    for n in range(0, document.length):
+    file_pointer.write("%03d" % document.unique_word_count)
+
+    # for each word
+    for n in range(0, document.unique_word_count):
         file_pointer.write(" %04d:%02d" % (
             document.words[n], util_functions.max_value_position(phi[n])))
 

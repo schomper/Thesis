@@ -28,7 +28,7 @@ def infer(model_root, save_location, corpus):
             print("Document %d" % index)
 
         document = corpus.doc_list[index]
-        phi = [[0 for x in range(model.num_topics)] for x in range(document.length)]
+        phi = [[0 for x in range(model.num_topics)] for x in range(document.unique_word_count)]
 
         # Determine likelihood
         likelihood = util_functions.lda_inference(document, model, var_gamma[index], phi)

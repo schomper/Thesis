@@ -16,7 +16,7 @@ def doc_e_step(document, gamma, phi, model, ss):
 
     ss.alpha_suffstats -= model.num_topics * digamma(gamma_sum)
 
-    for n in range(0, document.length):
+    for n in range(0, document.unique_word_count):
 
         for k in range(0, model.num_topics):
             ss.class_word[k][document.words[n]] += document.word_counts[n] * phi[n][k]
@@ -85,7 +85,7 @@ def lda_inference(document, model, var_gamma, phi):
         var_gamma[k] = model.alpha + (document.total_words / model.num_topics)
         digamma_gam[k] = digamma(var_gamma[k])
 
-        for n in range(0, document.length):
+        for n in range(0, document.unique_word_count):
             phi[n][k] = 1.0 / model.num_topics
 
     var_iter = 0
@@ -94,7 +94,8 @@ def lda_inference(document, model, var_gamma, phi):
                 (var_iter < global_att.VAR_MAX_ITER) or (global_att.VAR_MAX_ITER == -1))):
         var_iter += 1
 
-        for n in range(0, document.length):
+        # For each word in the document
+        for n in range(0, document.unique_word_count):
 
             phisum = 0
             for k in range(0, model.num_topics):
@@ -145,7 +146,7 @@ def compute_likelihood(document, model, phi, var_gamma):
                        + math.lgamma(var_gamma[k]) - (var_gamma[k] - 1)
                        * (dig[k] - digsum))
 
-        for n in range(0, document.length):
+        for n in range(0, document.unique_word_count):
             if phi[n][k] > 0:
                 likelihood += document.word_counts[n] * \
                               (phi[n][k] * ((dig[k] - digsum)
