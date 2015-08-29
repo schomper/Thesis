@@ -5,9 +5,9 @@ import util_functions
 import file_utils
 import global_att
 
-from classes.corpus import Corpus
-from classes.ldamodel import LDAModel
-from classes.ldasuffstats import LDASuffStats
+from classes import corpus
+from classes import ldamodel
+from classes import ldasuffstats
 
 
 def run_em(start, directory, corpus):
@@ -15,32 +15,32 @@ def run_em(start, directory, corpus):
     var_gamma = [[0 for x in range(global_att.NTOPICS)] \
                  for x in range(corpus.num_docs)]
 
-    max_length = corpus.max_length()
+    max_length = int(corpus.max_length())
     phi = [[0 for x in range(global_att.NTOPICS)] \
-           for x in range(int(corpus.max_length()))]
+           for x in range(max_length)]
 
     # initialize model
     model = None
 
     if start == "seeded":
 
-        model = LDAModel(corpus.num_terms, global_att.NTOPICS)
-        ss = LDASuffStats(model)
+        model = ldamodel.LDAModel(corpus.num_terms, global_att.NTOPICS)
+        ss = ldasuffstats.LDASuffStats(model)
         ss.corpus_initialize(model, corpus)
         model.mle(ss, 0)
         model.alpha = global_att.INITIAL_ALPHA
 
     elif start == "random":
-        model = LDAModel(corpus.num_terms, global_att.NTOPICS)
-        ss = LDASuffStats(model)
+        model = ldamodel.LDAModel(corpus.num_terms, global_att.NTOPICS)
+        ss = ldasuffstats.LDASuffStats(model)
         ss.random_initialize(model)
         model.mle(ss, 0)
         model.alpha = global_att.INITIAL_ALPHA
 
     else:
-        model = LDAModel(corpus.num_terms, global_att.NTOPICS)
+        model = ldamodel.LDAModel(corpus.num_terms, global_att.NTOPICS)
         model.load_model(start)
-        ss = LDASuffStats(model)
+        ss = ldasuffstats.LDASuffStats(model)
 
     filename = directory + "/000"
     model.save_model(filename)
@@ -64,7 +64,6 @@ def run_em(start, directory, corpus):
         ss.zero_initialize(model)
 
         # e-step
-
         for doc_index in range(0, corpus.num_docs):
 
             # Show user script is still running
@@ -127,7 +126,7 @@ if __name__ == "__main__":
         global_att.INITIAL_ALPHA = float(sys.argv[1])
         global_att.NTOPICS = int(sys.argv[2])
         file_utils.read_settings(sys.argv[3])
-        corpus = Corpus(sys.argv[4])
+        corpus = corpus.Corpus(sys.argv[4])
         file_utils.make_directory(sys.argv[6])
         run_em(sys.argv[5], sys.argv[6], corpus)
 

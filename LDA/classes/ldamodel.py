@@ -44,7 +44,7 @@ class LDAModel:
         file_pointer.close()
 
     def save_model(self, model_root):
-        # write information to beta file
+        # write log probability of a word being related to a topic to beta file
         filename = model_root + ".beta"
         file_object = open(filename, 'w')
 

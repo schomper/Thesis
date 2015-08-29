@@ -4,8 +4,7 @@ import sys
 import file_utils
 import util_functions
 
-from classes.corpus import Corpus
-from classes.ldamodel import LDAModel
+import classes
 
 
 def infer(model_root, save_location, corpus):

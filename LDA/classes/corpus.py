@@ -1,25 +1,30 @@
-from classes.document import Document
-
+import document
 
 class Corpus:
-    def __init__(self, filename):
+    def __init__(self, folder_name):
+
         print("Initiating Corpus...")
 
         self.doc_list = []
         self.num_terms = 0
         self.num_docs = 0
 
+        # traverse directory
+#        for year_folder in os.listdir(folder_name):
+#            for document in os.listdir(year_folder):
+#  1              print(document)
+
         # open file
-        with open(filename, "r") as document_list:
+        with open(folder_name, "r") as document_list:
 
             # for each document
-            for document in document_list:
-                document = document.strip()
+            for doc in document_list:
+                doc = doc.strip()
 
-                length, rest = document.split(" ", 1)
+                length, rest = doc.split(" ", 1)
                 length = int(length)
 
-                document = Document(length)
+                doc = document.Document(length)
 
                 # for each word
                 for n in range(0, length):
@@ -36,13 +41,13 @@ class Corpus:
                     count = int(count)
 
                     # add pair to the document
-                    document.add_pair(n, word, count)
+                    doc.add_pair(n, word, count)
 
                     if word >= self.num_terms:
                         self.num_terms = word + 1
 
                 # increase number of docs
-                self.doc_list.append(document)
+                self.doc_list.append(doc)
                 self.num_docs += 1
 
         print("Number of docs    : %d" % self.num_docs)
