@@ -4,10 +4,8 @@ import sys
 import re
 import os
 import string
-from nltk.stem import PorterStemmer
 from pathlib import Path
 
-output_file = open('formatted.txt', 'w')
 vocab = []
 
 def find_list_index(list_list, value):
@@ -92,7 +90,7 @@ def main():
 
     input_directory = Path(sys.argv[1])
     output_directory = sys.argv[2]
-
+    output_file = open(output_directory + '.formatted', 'w')
 
     for year_directory in input_directory.iterdir():
         for day_file in year_directory.iterdir():
@@ -105,14 +103,13 @@ def main():
                 process_line(line, output_file)
 
 
-    vocab_file = open('vocabStemmed.txt', 'w')
+    vocab_file = open(output_directory + '.vocab', 'w')
     print(len(vocab))
     for word in vocab:
         vocab_file.write("%s\n" % word)
 
 
 if __name__ == '__main__':
-    output_file = open('formattedStemmed.txt', 'w')
     vocab = []
 
     main()
