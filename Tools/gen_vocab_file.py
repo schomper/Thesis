@@ -4,17 +4,11 @@ import sys
 import re
 import os
 import string
+from nltk.stem import PorterStemmer
 from pathlib import Path
 
-doc_counter = 0
-reading = False
 output_file = open('formatted.txt', 'w')
 vocab = []
-word_count = 0
-doc_words = []
-doc_word_count = 0
-doc_info_string = ""
-
 
 def find_list_index(list_list, value):
     for i in range(len(list_list)):
@@ -23,96 +17,74 @@ def find_list_index(list_list, value):
 
     return -1
 
+def strip_line(line, ltoken, rtoken):
+    if line.startswith(ltoken):
+        line = line[len(ltoken):]
+    if line.endswith(rtoken):
+        line = line[:-len(rtoken)]
+    return line
+
 def process_line(line, output_file):
-    global doc_counter
-    global reading
     global vocab
-    global word_count
-    global doc_words
-    global doc_word_count
-    global doc_info_string
 
-    # If this is the last line of a document
-    if '</DOC>' in line:
+    if '<Date>' in line:
+        output_file.write(strip_line(line, '<Date>', '</Date>\n') + '|~|')
 
-        # add each word's information to the string
-        for index_count in doc_words:
-            doc_info_string = doc_info_string + " " + str(index_count[0]) + ":" + str(index_count[1])
+    elif '<Title>' in line:
+        output_file.write(strip_line(line, '<Title>', '</Title>\n') + '|~|')
 
-        write_line = str(doc_word_count) + doc_info_string + "\n"
-        # write line to file
-        output_file.write(write_line)
+    elif '<Topic>' in line:
+        output_file.write(strip_line(line, '<Topic>', '</Topic>\n') + '|~|')
 
-        # Reset everything
-        doc_word_count = 0
-        doc_info_string = ""
-        doc_words = []
+    elif '<Contents>' in line:
+        unique_words = []
+        unique_words_count = 0
 
-    # if start of text begin reading words
-    elif '<TEXT>' in line:
-        reading = True
+        line = strip_line(line, '<Contents>', '</Contents>\n')
+        document_words = line.split(' ')
 
-    # if end of text stop reading words
-    elif '</TEXT>' in line:
-        reading = False
+        for word in document_words:
 
-    # if we're not reading and its not a special case skip to next line
-    elif not reading:
-        return 
-
-    else:
-        # replace - with space in line
-        line = re.sub("-", " ", line)
-
-        # remove all digits
-        trans_dig = line.maketrans('', '', string.digits)
-        line = line.translate(trans_dig)
-
-        # remove all punctuation
-        trans_punc = line.maketrans('', '', string.punctuation)
-        line = line.translate(trans_punc)
-
-        # split into words
-        line_words = line.split(" ")
-
-        for word in line_words:
-            # to ensure words are consistent change all words to lowercase
-            word = word.lower()
             word = re.sub(r'\s+', "", word)
+            if word == '':
+                continue
 
-            # if the word is not in the vocab
             if word not in vocab:
+
                 # add word to vocab
                 vocab.append(word)
-                word_count += 1
 
-                doc_words.append([vocab.index(word), 1])
-                doc_word_count += 1
+                unique_words.append([vocab.index(word), 1])
+                unique_words_count += 1
 
-            elif (word in vocab) and (find_list_index(doc_words, vocab.index(word)) < 0):
+            # if the word is in the vocab and not present in document
+            elif (word in vocab) and (find_list_index(unique_words, vocab.index(word)) < 0):
 
-                doc_words.append([vocab.index(word), 1])
-                doc_word_count += 1
+                unique_words.append([vocab.index(word), 1])
+                unique_words_count += 1
 
-            # if the word is in the vocab
-            elif (word in vocab) and (find_list_index(doc_words, vocab.index(word)) >= 0):
+            # if the word is in the vocab and present in document
+            elif (word in vocab) and (find_list_index(unique_words, vocab.index(word)) >= 0):
 
                 # increment word count for document
                 index = vocab.index(word)
-                list_index = find_list_index(doc_words, index)
+                list_index = find_list_index(unique_words, index)
 
-                doc_words[list_index][1] += 1
+                unique_words[list_index][1] += 1
+
+        output_file.write(str(len(unique_words)))
+
+        doc_info_string = ''
+
+        for index_count in unique_words:
+            doc_info_string = doc_info_string + " " + str(index_count[0]) + ":" + str(index_count[1])
+
+        output_file.write(doc_info_string + '\n')
 
 
 def main():
     """ Main function for program """
-    global doc_counter
-    global reading
     global vocab
-    global word_count
-    global doc_words
-    global doc_word_count
-    global doc_info_string
 
     if len(sys.argv) != 3:
         print("usage: .py <input_directory> <output_directory>\n")
@@ -125,28 +97,22 @@ def main():
     for year_directory in input_directory.iterdir():
         for day_file in year_directory.iterdir():
             print('Processing: {}'.format(day_file))
-            
+
             with day_file.open() as f:
                 lines = f.readlines()
 
             for line in lines:
                 process_line(line, output_file)
-            
 
-    vocab_file = open('vocab.txt', 'w')
+
+    vocab_file = open('vocabStemmed.txt', 'w')
     print(len(vocab))
     for word in vocab:
         vocab_file.write("%s\n" % word)
 
 
 if __name__ == '__main__':
-    doc_counter = 0
-    reading = False
-    output_file = open('formatted.txt', 'w')
+    output_file = open('formattedStemmed.txt', 'w')
     vocab = []
-    word_count = 0
-    doc_words = []
-    doc_word_count = 0
-    doc_info_string = ""
-    
+
     main()
